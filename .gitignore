@@ -1,2 +1,5 @@
 # Personal scripts
 pw-*.sh
+.terraform
+.terraform.lock.hcl
+

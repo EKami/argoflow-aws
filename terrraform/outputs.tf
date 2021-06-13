@@ -38,7 +38,17 @@ output "worker_iam" {
   value = module.eks.worker_iam_role_name
 }
 
-output "tls_cert_arn" {
-  description = "Use this value in kubeflow_config/istio-ingress.yaml"
-  value = aws_acm_certificate.cert.arn
+output "cluster_autoscaler_arn" {
+  description = "The cluster_autoscaler policy ARN"
+  value = aws_iam_policy.cluster-autoscaler-policy.arn
+}
+
+output "loadbalancer_controller_arn" {
+  description = "The loadbalancer_controller policy ARN"
+  value = aws_iam_policy.load-balancer-policy.arn
+}
+
+output "external_dns_arn" {
+  description = "The external_dns policy ARN"
+  value = aws_iam_policy.ext_dns.arn
 }
