@@ -134,3 +134,13 @@ provider "kubectl" {
       command     = "aws"
   }
 }
+
+# State bucket
+resource "aws_s3_bucket" "argoflow_state_bucket" {
+  bucket = var.argoflow_state_bucket_name
+  acl = "private"
+
+  tags = {
+    Name = "Argoflow state bucket"
+  }
+}

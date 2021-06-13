@@ -41,3 +41,8 @@ variable "db_instance_type" {
   type        = string
   default     = "db.t3.small"
 }
+
+variable "argoflow_state_bucket_name" {
+  description = "The name of the bucket that stores the MLFlow and Kubeflow pipeline artifacts"
+  default = "argoflow-state-bucket"
+}

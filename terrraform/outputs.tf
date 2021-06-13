@@ -35,10 +35,11 @@ output "argoflow_config" {
 <<__role_arn.loadbalancer_controller__>>=${aws_iam_policy.load-balancer-policy.arn}
 <<__role_arn.external_dns__>>=${aws_iam_policy.ext_dns.arn}
 <<__role_arn.oauth2_proxy__>>=${aws_iam_policy.ext_dns.arn}
+
 <<__role_arn.pipelines__>>=arn:aws:iam::890123456789:role/my-cluster_kubeflow_pipelines
 <<__role_arn.cert_manager__>>=arn:aws:iam::890123456789:role/my-cluster_cert-manager_cert-manager
-
 <<__role_arn.kube2iam_pipelines__>>=arn:aws:iam::890123456789:role/my-cluster_kubeflow_kube2iam_pipelines
+
 <<__role_arn.external_secrets__>>=${aws_iam_policy.external-secrets.arn}
 <<__role_arn.external_secrets.mlflow__>>=${aws_iam_policy.external-secrets.arn}
 <<__role_arn.external_secrets.kubeflow__>>=${aws_iam_policy.external-secrets.arn}
@@ -91,11 +92,11 @@ output "argoflow_config" {
 <<__rds.db_name.metadata__>>=metadb
 <<__rds.db_name.katib__>>=katib
 <<__rds.db_name.mlflow__>>=mlflow
-<<__rds.host__>>=${aws_db_instance.argoflow-db-instance.endpoint}
+<<__rds.host__>>=${aws_db_instance.argoflow-db-instance.address}
 <<__rds.port__>>=${aws_db_instance.argoflow-db-instance.port}
 
-<<__s3.bucket.mlflow__>>=890123456789-my-cluster-mlflow
-<<__s3.bucket.pipelines__>>=890123456789-my-cluster-pipelines
+<<__s3.bucket.mlflow__>>=${aws_s3_bucket.argoflow_state_bucket.id}
+<<__s3.bucket.pipelines__>>=${aws_s3_bucket.argoflow_state_bucket.id}
 <<__s3.key_prefix.mlflow__>>=mlflow/experiments
 <<__s3.key_prefix.pipelines__>>=pipelines/artifacts
 <<__s3.path.pipelines__>>=pipelines
@@ -103,6 +104,7 @@ output "argoflow_config" {
 <<__aws_load_balancer.scheme__>>=internet-facing
 <<__aws_load_balancer.name__>>=nlb-${var.cluster_name}
 <<__aws_load_balancer.nlb_target_type__>>=instance
+
 <<__oidc.issuer__>>=${module.eks.cluster_oidc_issuer_url}
 <<__oidc.redis.connection_url__>>=redis://my-cluster-redis.abcxyz.0001.euc1.cache.amazonaws.com:6379
   CONFIG
