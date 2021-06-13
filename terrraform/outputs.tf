@@ -106,6 +106,6 @@ output "argoflow_config" {
 <<__aws_load_balancer.nlb_target_type__>>=instance
 
 <<__oidc.issuer__>>=${module.eks.cluster_oidc_issuer_url}
-<<__oidc.redis.connection_url__>>=${module.eks.cluster_oidc_issuer_url}
+<<__oidc.redis.connection_url__>>=redis://${aws_elasticache_cluster.oauth_cache.cache_nodes.0.address}:${aws_elasticache_cluster.oauth_cache.cache_nodes.0.port}
   CONFIG
 }

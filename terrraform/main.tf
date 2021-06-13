@@ -144,3 +144,14 @@ resource "aws_s3_bucket" "argoflow_state_bucket" {
     Name = "Argoflow state bucket"
   }
 }
+
+# Oauth2-Proxy cache
+resource "aws_elasticache_cluster" "oauth_cache" {
+  cluster_id           = "oauth-cache"
+  engine               = "redis"
+  node_type            = "cache.t2.small"
+  num_cache_nodes      = 1
+  parameter_group_name = "default.redis6.x"
+  engine_version       = "6.x"
+  port                 = 6379
+}
