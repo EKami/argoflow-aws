@@ -3,3 +3,4 @@ pw-*.sh
 .terraform
 .terraform.lock.hcl
 terraform.tfstate*
+setup.conf
