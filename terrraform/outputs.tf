@@ -34,10 +34,10 @@ output "argoflow_config" {
 <<__role_arn.cluster_autoscaler__>>=${aws_iam_policy.cluster-autoscaler-policy.arn}
 <<__role_arn.loadbalancer_controller__>>=${aws_iam_policy.load-balancer-policy.arn}
 <<__role_arn.external_dns__>>=${aws_iam_policy.ext_dns.arn}
-<<__role_arn.oauth2_proxy__>>=${aws_iam_policy.ext_dns.arn}
 
+<<__role_arn.oauth2_proxy__>>=arn:aws:iam::890123456789:role/my-cluster_oauth2-proxy_oauth2-prox
 <<__role_arn.pipelines__>>=arn:aws:iam::890123456789:role/my-cluster_kubeflow_pipelines
-<<__role_arn.cert_manager__>>=arn:aws:iam::890123456789:role/my-cluster_cert-manager_cert-manager
+<<__role_arn.cert_manager__>>=${aws_iam_policy.ext_dns.arn}
 <<__role_arn.kube2iam_pipelines__>>=arn:aws:iam::890123456789:role/my-cluster_kubeflow_kube2iam_pipelines
 
 <<__role_arn.external_secrets__>>=${aws_iam_policy.external-secrets.arn}
