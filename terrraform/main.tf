@@ -2,17 +2,17 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 3.44.0"
+      version = ">= 3.45.0"
     }
 
     local = {
       source  = "hashicorp/local"
-      version = "2.0.0"
+      version = "2.1.0"
     }
 
     null = {
       source  = "hashicorp/null"
-      version = "3.0.0"
+      version = "3.1.0"
     }
 
     template = {
@@ -22,12 +22,12 @@ terraform {
 
     kubernetes = {  
       source  = "hashicorp/kubernetes"
-      version = ">= 2.3.1"
+      version = "2.3.2"
     }
 
     kubectl = {
       source = "gavinbunney/kubectl"
-      version = "1.10.0"
+      version = "1.11.1"
     }
   }
 
@@ -41,13 +41,12 @@ provider "aws" {
 # https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/latest
 module "eks" {
   source                  = "terraform-aws-modules/eks/aws"
-  version                 = "16.2.0"
+  version                 = "17.1.0"
   cluster_name            = var.cluster_name
   cluster_version         = var.k8s_version
   subnets                 = module.vpc.private_subnets
   write_kubeconfig        = true
-  # Replaced by kubeconfig_output_path in future versions
-  config_output_path  = var.kubeconfig_output
+  kubeconfig_output_path  = var.kubeconfig_output
 
   tags = {
       "k8s.io/cluster-autoscaler/enabled": "true"

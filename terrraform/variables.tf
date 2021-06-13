@@ -10,8 +10,7 @@ variable "aws_region" {
 
 variable "k8s_version" {
   description = "kubernetes version"
-  # TODO update to 1.20
-  default = "1.19"
+  default = "1.20"
   type    = string
 }
 

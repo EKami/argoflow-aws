@@ -130,116 +130,36 @@ resource "aws_iam_role_policy_attachment" "external-secrets" {
 }
 
 # ------------------ ExternalSecret for specific namespaces (only useful for option 2) ------------------
-# --- ExternalSecret for the argocd namespace
-resource "aws_iam_policy" "external-secrets-argocd" {
-  name = "AWSExternalSecretsArgoCDIAMPolicy"
-  description = "AWS external argocd secrets IAM Policy for k8s cluster"
-  policy      = data.aws_iam_policy_document.external-secrets-argocd.json
-}
+# --- ExternalSecret for Option 2
+# Group IAM policies, otherwise we'll reach the "Cannot exceed quota for PoliciesPerRole: 10" error
+# resource "aws_iam_policy" "external-secrets-namespaces" {
+#   name = "AWSExternalSecretsNamespacesCDIAMPolicy"
+#   description = "AWS external namespace secrets IAM Policy for k8s cluster"
+#   policy      = data.aws_iam_policy_document.external-secrets-argocd.json
+# }
 
-data "aws_iam_policy_document" "external-secrets-argocd" {
-  statement {
-    effect = "Allow"
+# data "aws_iam_policy_document" "external-secrets-namespaces" {
+#   statement {
+#     effect = "Allow"
 
-    actions = [
-      "secretsmanager:ListSecretVersionIds",
-      "secretsmanager:GetSecretValue",
-      "secretsmanager:GetResourcePolicy",
-      "secretsmanager:DescribeSecret"
-    ]
+#     actions = [
+#       "secretsmanager:ListSecretVersionIds",
+#       "secretsmanager:GetSecretValue",
+#       "secretsmanager:GetResourcePolicy",
+#       "secretsmanager:DescribeSecret"
+#     ]
 
-    resources = ["arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}/argocd*"]
-  }
-}
+#     resources = [
+#       "arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}/istio-system*",
+#       "arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}/argocd*",
+#       "arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}/kubeflow*",
+#       "arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}/oauth2-proxy*",
+#       "arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}/mlflow*"
+#     ]
+#   }
+# }
 
-resource "aws_iam_role_policy_attachment" "external-secrets-argocd" {
-  policy_arn = aws_iam_policy.external-secrets-argocd.arn
-  role       = module.eks.worker_iam_role_name
-}
-
-
-# --- ExternalSecret for the kubeflow namespace
-resource "aws_iam_policy" "external-secrets-kubeflow" {
-  name = "AWSExternalSecretsKubeflowIAMPolicy"
-  description = "AWS external Kubeflow secrets IAM Policy for k8s cluster"
-  policy      = data.aws_iam_policy_document.external-secrets-kubeflow.json
-}
-
-data "aws_iam_policy_document" "external-secrets-kubeflow" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "secretsmanager:ListSecretVersionIds",
-      "secretsmanager:GetSecretValue",
-      "secretsmanager:GetResourcePolicy",
-      "secretsmanager:DescribeSecret"
-    ]
-
-    resources = ["arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}/kubeflow*"]
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "external-secrets-kubeflow" {
-  policy_arn = aws_iam_policy.external-secrets-kubeflow.arn
-  role       = module.eks.worker_iam_role_name
-}
-
-
-# --- ExternalSecret for the oauth2_proxy namespace
-resource "aws_iam_policy" "external-secrets-oauth2_proxy" {
-  name = "AWSExternalSecretsOAuth2ProxyIAMPolicy"
-  description = "AWS external oauth2_proxy secrets IAM Policy for k8s cluster"
-  policy      = data.aws_iam_policy_document.external-secrets-oauth2_proxy.json
-}
-
-data "aws_iam_policy_document" "external-secrets-oauth2_proxy" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "secretsmanager:ListSecretVersionIds",
-      "secretsmanager:GetSecretValue",
-      "secretsmanager:GetResourcePolicy",
-      "secretsmanager:DescribeSecret"
-    ]
-
-    resources = ["arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}/oauth2-proxy*"]
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "external-secrets-oauth2_proxy" {
-  policy_arn = aws_iam_policy.external-secrets-oauth2_proxy.arn
-  role       = module.eks.worker_iam_role_name
-}
-
-
-
-# --- ExternalSecret for the mlflow namespace
-resource "aws_iam_policy" "external-secrets-mlflow" {
-  name = "AWSExternalSecretsMlflowIAMPolicy"
-  description = "AWS external mlflow secrets IAM Policy for k8s cluster"
-  policy      = data.aws_iam_policy_document.external-secrets-mlflow.json
-}
-
-data "aws_iam_policy_document" "external-secrets-mlflow" {
-  statement {
-    effect = "Allow"
-
-    actions = [
-      "secretsmanager:ListSecretVersionIds",
-      "secretsmanager:GetSecretValue",
-      "secretsmanager:GetResourcePolicy",
-      "secretsmanager:DescribeSecret"
-    ]
-
-    resources = ["arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}/mlflow*"]
-  }
-}
-
-resource "aws_iam_role_policy_attachment" "external-secrets-mlflow" {
-  policy_arn = aws_iam_policy.external-secrets-mlflow.arn
-  role       = module.eks.worker_iam_role_name
-}
-
-
+# resource "aws_iam_role_policy_attachment" "external-secrets-namespaces" {
+#   policy_arn = aws_iam_policy.external-secrets-namespaces.arn
+#   role       = module.eks.worker_iam_role_name
+# }

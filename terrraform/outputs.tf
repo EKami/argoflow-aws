@@ -39,12 +39,12 @@ output "argoflow_config" {
 <<__role_arn.cert_manager__>>=arn:aws:iam::890123456789:role/my-cluster_cert-manager_cert-manager
 
 <<__role_arn.kube2iam_pipelines__>>=arn:aws:iam::890123456789:role/my-cluster_kubeflow_kube2iam_pipelines
-<<__role_arn.external_secrets__>>=arn:aws:iam::890123456789:role/my-cluster_kube-system_external-secrets
-<<__role_arn.external_secrets.mlflow__>>=${aws_iam_policy.external-secrets-mlflow.arn}
-<<__role_arn.external_secrets.kubeflow__>>=${aws_iam_policy.external-secrets-kubeflow.arn}
-<<__role_arn.external_secrets.argocd__>>=${aws_iam_policy.external-secrets-argocd.arn}
-<<__role_arn.external_secrets.auth__>>=${aws_iam_policy.external-secrets-oauth2_proxy.arn}
-<<__role_arn.external_secrets.istio_system__>>=arn:aws:iam::890123456789:role/my-cluster_external_secret_istio-system
+<<__role_arn.external_secrets__>>=${aws_iam_policy.external-secrets.arn}
+<<__role_arn.external_secrets.mlflow__>>=${aws_iam_policy.external-secrets.arn}
+<<__role_arn.external_secrets.kubeflow__>>=${aws_iam_policy.external-secrets.arn}
+<<__role_arn.external_secrets.argocd__>>=${aws_iam_policy.external-secrets.arn}
+<<__role_arn.external_secrets.auth__>>=${aws_iam_policy.external-secrets.arn}
+<<__role_arn.external_secrets.istio_system__>>=${aws_iam_policy.external-secrets.arn}
 <<__external_secret_name.istio_system.auth_ca_cert__>>=${var.cluster_name}/istio-system/auth_ca_cert
 <<__external_secret_name.istio_system.auth_cert__>>=${var.cluster_name}/istio-system/auth_cert
 <<__external_secret_name.istio_system.auth_cert_pk__>>=${var.cluster_name}/istio-system/auth_cert_pk
