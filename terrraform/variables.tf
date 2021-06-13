@@ -36,3 +36,9 @@ variable "base_github_repo" {
   type        = string
   default     = "argoflow/argoflow-aws/master"
 }
+
+variable "db_instance_type" {
+  description = "The db that contains data for cachedb/mlpipeline/metadb/katib/mlflow"
+  type        = string
+  default     = "db.t3.small"
+}
