@@ -77,8 +77,8 @@ output "argoflow_config" {
 <<__external_secret_name.auth.oidc_client_secret__>>=${var.cluster_name}/auth/client_secret
 <<__external_secret_name.auth.oidc_cookie_secret__>>=${var.cluster_name}/auth/cookie_secret
 
-<<__git_repo.url__>>=https://github.com/EKami/argoflow-aws.git
-<<__git_repo.target_revision__>>=feature/terraform-deploy
+<<__git_repo.url__>>=${var.repo_url}
+<<__git_repo.target_revision__>>=${var.target_revision}
 
 <<__cluster_name__>>=${var.cluster_name}
 <<__aws_region__>>=${var.aws_region}

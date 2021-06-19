@@ -46,3 +46,13 @@ variable "argoflow_state_bucket_name" {
   description = "The name of the bucket that stores the MLFlow and Kubeflow pipeline artifacts"
   default = "argoflow-state-bucket"
 }
+
+variable "repo_url" {
+  description = "The repo url where this project is located, used by argocd to pull the apps"
+  type = string
+}
+
+variable "target_revision" {
+  description = "Branch to use to pull the argocd apps"
+  type = string
+}
