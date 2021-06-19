@@ -113,6 +113,19 @@ resource "aws_route53_record" "ext-dns-route" {
   zone_id         = data.aws_route53_zone.domain.zone_id
 }
 
+# --- Pipelines iam user s3 access
+# https://github.com/EKami/argoflow-aws#aws-users
+data "http" "pipelines-policy" {
+  url = "https://raw.githubusercontent.com/${var.base_github_repo}/docs/iam_policies/pipelines-iam-user-s3-access.json"
+}
+
+resource "aws_iam_user_policy" "pipelines-user" {
+  name = "AWSKubeflowPipelinesUser"
+  description = "Kubeflow pipelines IAM user for s3 access"
+  policy      = data.http.load-balancer-policy.body
+}
+
+
 # --- External secrets (Option 1)
 resource "aws_iam_policy" "external-secrets" {
   name = "AWSExternalSecretsIAMPolicy"

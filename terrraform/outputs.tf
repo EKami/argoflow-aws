@@ -28,6 +28,15 @@
 #   value = module.eks.worker_iam_role_name
 # }
 
+
+output "kubeflow_pipeline_user_access_key" {
+  value = aws_iam_user.pipelines-user.name
+}
+
+output "kubeflow_pipeline_user_secret_key" {
+  value = aws_iam_access_key.pipelines-user.secret
+}
+
 # ----- Output for argoflow configuration
 output "argoflow_config" {
   value = <<CONFIG
