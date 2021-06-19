@@ -30,11 +30,12 @@
 
 
 output "kubeflow_pipeline_user_access_key" {
-  value = aws_iam_user.pipelines-user.name
+  value = aws_iam_user.pipelines_user.name
 }
 
 output "kubeflow_pipeline_user_secret_key" {
-  value = aws_iam_access_key.pipelines-user.secret
+  value = aws_iam_access_key.pipelines_user.secret
+  sensitive = true
 }
 
 # ----- Output for argoflow configuration

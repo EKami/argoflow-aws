@@ -6,12 +6,12 @@ data "http" "load-balancer-policy" {
 resource "aws_iam_policy" "load-balancer-policy" {
   name = "AWSLoadBalancerControllerIAMPolicy"
   description = "AWS LoadBalancer Controller IAM Policy for k8s cluster"
-  policy      = data.http.load-balancer-policy.body
+  policy = data.http.load-balancer-policy.body
 }
 
 resource "aws_iam_role_policy_attachment" "aws-load-balancer-controller" {
   policy_arn = aws_iam_policy.load-balancer-policy.arn
-  role       = module.eks.worker_iam_role_name
+  role = module.eks.worker_iam_role_name
 }
 
 # --- Cluster autoscaler
@@ -22,25 +22,25 @@ data "http" "cluster-autoscaler-policy" {
 resource "aws_iam_policy" "cluster-autoscaler-policy" {
   name = "AWSClusterAutoscalerIAMPolicy"
   description = "AWS Cluster Autoscaler IAM Policy for k8s cluster"
-  policy      = data.http.cluster-autoscaler-policy.body
+  policy = data.http.cluster-autoscaler-policy.body
 }
 
 resource "aws_iam_role_policy_attachment" "cluster-autoscaler" {
   policy_arn = aws_iam_policy.cluster-autoscaler-policy.arn
-  role       = module.eks.worker_iam_role_name
+  role = module.eks.worker_iam_role_name
 }
 
 
 # --- External DNS
 resource "aws_iam_role_policy_attachment" "ext_dns" {
   policy_arn = aws_iam_policy.ext_dns.arn
-  role       = module.eks.worker_iam_role_name
+  role = module.eks.worker_iam_role_name
 }
 
 resource "aws_iam_policy" "ext_dns" {
   name_prefix = "eks-ext-dns-${module.eks.cluster_id}"
   description = "EKS ext-dns for cluster ${module.eks.cluster_id}"
-  policy      = data.aws_iam_policy_document.ext_dns.json
+  policy = data.aws_iam_policy_document.ext_dns.json
 }
 
 data "aws_iam_policy_document" "ext_dns" {
@@ -51,7 +51,8 @@ data "aws_iam_policy_document" "ext_dns" {
       "route53:GetChange"
     ]
 
-    resources = ["arn:aws:route53:::change/*"]
+    resources = [
+      "arn:aws:route53:::change/*"]
   }
 
   statement {
@@ -62,7 +63,8 @@ data "aws_iam_policy_document" "ext_dns" {
       "route53:ListResourceRecordSets"
     ]
 
-    resources = ["arn:aws:route53:::hostedzone/*"]
+    resources = [
+      "arn:aws:route53:::hostedzone/*"]
   }
 
   statement {
@@ -73,12 +75,13 @@ data "aws_iam_policy_document" "ext_dns" {
       "route53:ListResourceRecordSets"
     ]
 
-    resources = ["*"]
+    resources = [
+      "*"]
   }
 }
 
 resource "aws_acm_certificate" "cert" {
-  domain_name       = "${var.domain_name}.${var.hosted_dns_name}"
+  domain_name = "${var.domain_name}.${var.hosted_dns_name}"
   validation_method = "DNS"
 
   lifecycle {
@@ -87,50 +90,58 @@ resource "aws_acm_certificate" "cert" {
 }
 
 resource "aws_acm_certificate_validation" "cert_val" {
-  certificate_arn         = aws_acm_certificate.cert.arn
+  certificate_arn = aws_acm_certificate.cert.arn
   validation_record_fqdns = [for record in aws_route53_record.ext-dns-route : record.fqdn]
 }
 
 data "aws_route53_zone" "domain" {
-  name         = var.hosted_dns_name
+  name = var.hosted_dns_name
   private_zone = false
 }
 
 resource "aws_route53_record" "ext-dns-route" {
   for_each = {
-    for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {
-      name   = dvo.resource_record_name
-      record = dvo.resource_record_value
-      type   = dvo.resource_record_type
-    }
+  for dvo in aws_acm_certificate.cert.domain_validation_options : dvo.domain_name => {
+    name = dvo.resource_record_name
+    record = dvo.resource_record_value
+    type = dvo.resource_record_type
+  }
   }
 
   allow_overwrite = true
-  name            = each.value.name
-  records         = [each.value.record]
-  ttl             = 60
-  type            = each.value.type
-  zone_id         = data.aws_route53_zone.domain.zone_id
+  name = each.value.name
+  records = [
+    each.value.record]
+  ttl = 60
+  type = each.value.type
+  zone_id = data.aws_route53_zone.domain.zone_id
 }
 
 # --- Pipelines iam user s3 access
 # https://github.com/EKami/argoflow-aws#aws-users
-data "http" "pipelines-policy" {
+data "http" "pipelines_policy" {
   url = "https://raw.githubusercontent.com/${var.base_github_repo}/docs/iam_policies/pipelines-iam-user-s3-access.json"
 }
 
-resource "aws_iam_user_policy" "pipelines-user" {
+resource "aws_iam_user" "pipelines_user" {
   name = "AWSKubeflowPipelinesUser"
-  description = "Kubeflow pipelines IAM user for s3 access"
-  policy      = data.http.load-balancer-policy.body
 }
 
+resource "aws_iam_user_policy" "pipelines_policy" {
+  name = "AWSKubeflowPipelinesPolicy"
+  user = aws_iam_user.pipelines_user.name
+  policy = data.http.pipelines_policy.body
+}
+
+resource "aws_iam_access_key" "pipelines_user" {
+  user = aws_iam_user.pipelines_user.name
+}
 
 # --- External secrets (Option 1)
 resource "aws_iam_policy" "external-secrets" {
   name = "AWSExternalSecretsIAMPolicy"
   description = "AWS external secrets IAM Policy for k8s cluster"
-  policy      = data.aws_iam_policy_document.external-secrets.json
+  policy = data.aws_iam_policy_document.external-secrets.json
 }
 
 data "aws_iam_policy_document" "external-secrets" {
@@ -144,13 +155,14 @@ data "aws_iam_policy_document" "external-secrets" {
       "secretsmanager:DescribeSecret"
     ]
 
-    resources = ["arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}*"]
+    resources = [
+      "arn:aws:secretsmanager:${var.aws_region}:${data.aws_caller_identity.current.account_id}:secret:${var.cluster_name}*"]
   }
 }
 
 resource "aws_iam_role_policy_attachment" "external-secrets" {
   policy_arn = aws_iam_policy.external-secrets.arn
-  role       = module.eks.worker_iam_role_name
+  role = module.eks.worker_iam_role_name
 }
 
 # ------------------ ExternalSecret for specific namespaces (only useful for option 2) ------------------
