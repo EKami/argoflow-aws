@@ -39,10 +39,6 @@ spec:
         value: 'true'
       - name: rbac.pspEnabled
         value: 'true'
-      - name: resources.limits.cpu
-        value: 100m
-      - name: resources.limits.memory
-        value: 300Mi
       - name: resources.requests.cpu
         value: 100m
       - name: resources.requests.memory
