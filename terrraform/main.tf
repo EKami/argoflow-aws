@@ -48,6 +48,9 @@ module "eks" {
   write_kubeconfig        = true
   kubeconfig_output_path  = var.kubeconfig_output
 
+  # Needed for aws-autoscaler
+  enable_irsa = true
+
   tags = {
       "k8s.io/cluster-autoscaler/enabled": "true"
       "k8s.io/cluster-autoscaler/${var.cluster_name}": "owned"
