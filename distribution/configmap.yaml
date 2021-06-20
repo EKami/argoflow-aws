@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cluster-parameters
+data:
+  load_balancer.name: <<__aws_load_balancer.name__>>
+  load_balancer.scheme: <<__aws_load_balancer.scheme__>>
+  load_balancer.nlb_target_type: <<__aws_load_balancer.nlb_target_type__>>
+  route53.hosted_zone_hostnames: <<__route53.hosted_zone_hostnames__>>
