@@ -41,7 +41,7 @@ output "kubeflow_pipeline_user_secret_key" {
 # ----- Output for argoflow configuration
 output "argoflow_config" {
   value = <<CONFIG
-<<__role_arn.cluster_autoscaler__>>=${aws_iam_policy.cluster-autoscaler-policy.arn}
+<<__role_arn.cluster_autoscaler__>>=${aws_iam_policy.worker_autoscaling.arn}
 <<__role_arn.loadbalancer_controller__>>=${aws_iam_policy.load-balancer-policy.arn}
 <<__role_arn.external_dns__>>=${aws_iam_policy.ext_dns.arn}
 
