@@ -15,20 +15,20 @@ resource "aws_iam_role_policy_attachment" "aws-load-balancer-controller" {
 }
 
 # --- Cluster autoscaler
-data "http" "cluster-autoscaler-policy" {
-  url = "https://raw.githubusercontent.com/${var.base_github_repo}/docs/iam_policies/cluster-autoscaler.json"
-}
-
-resource "aws_iam_policy" "cluster-autoscaler-policy" {
-  name = "AWSClusterAutoscalerIAMPolicy"
-  description = "AWS Cluster Autoscaler IAM Policy for k8s cluster"
-  policy = data.http.cluster-autoscaler-policy.body
-}
-
-resource "aws_iam_role_policy_attachment" "cluster-autoscaler" {
-  policy_arn = aws_iam_policy.cluster-autoscaler-policy.arn
-  role = module.eks.worker_iam_role_name
-}
+//data "http" "cluster-autoscaler-policy" {
+//  url = "https://raw.githubusercontent.com/${var.base_github_repo}/docs/iam_policies/cluster-autoscaler.json"
+//}
+//
+//resource "aws_iam_policy" "cluster-autoscaler-policy" {
+//  name = "AWSClusterAutoscalerIAMPolicy"
+//  description = "AWS Cluster Autoscaler IAM Policy for k8s cluster"
+//  policy = data.http.cluster-autoscaler-policy.body
+//}
+//
+//resource "aws_iam_role_policy_attachment" "cluster-autoscaler" {
+//  policy_arn = aws_iam_policy.cluster-autoscaler-policy.arn
+//  role = module.eks.worker_iam_role_name
+//}
 
 
 # --- External DNS
