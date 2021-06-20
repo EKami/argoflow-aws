@@ -37,6 +37,7 @@ resource "aws_db_instance" "argoflow-db-instance" {
   name = "argoflow_db"
   username = "postgres"
   password = random_password.db_password.result
+  deletion_protection = false
 
   db_subnet_group_name = aws_db_subnet_group.default.name
   vpc_security_group_ids = [
